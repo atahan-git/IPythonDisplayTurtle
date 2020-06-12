@@ -49,29 +49,29 @@ class Snake():
     def speed(self, speed):
         self._speed = speed
         
-    def rotationspeed(self, rotspeed):
+    def rotationSpeed(self, rotspeed):
         self._rotspeed = rotspeed
         
-    def pendown(self):
+    def penDown(self):
         self._pendown = 1
         
-    def penup(self):
+    def penUp(self):
         self._pendown = 0
         
-    def pencolor(self, color):
+    def penColor(self, color):
         # TODO: check if color is legal and throw errors
         self._pencolor = color
         
-    def penwidth(self, width):
+    def penWidth(self, width):
         self._penwidth = width
         
-    def turnright(self, amount):
+    def turnRight(self, amount):
         self._rotateTo(self._rotation + amount)
         
-    def turnleft(self, amount):
+    def turnLeft(self, amount):
         self._rotateTo(self._rotation - amount)
         
-    def goforward(self, amount):
+    def goForward(self, amount):
         newX = self._x + round(amount * math.sin(math.radians(self._rotation)), 1)
         newY = self._y - round(amount * math.cos(math.radians(self._rotation)), 1)
         self._moveTo(newX, newY)
@@ -80,8 +80,9 @@ class Snake():
         # for some reason it is not doing the last 2 actions... sooooo
         self.goforward(1)
         self.turnright(1)
-        #self._randHash = random.getrandbits(128)
-        self._randHash = "asForTurtle";
+        # this is so that each turtle gets their own canvas
+        self._randHash = random.getrandbits(128)
+        #self._randHash = "asForTurtle";
         ## Canvas creation
         display(HTML('<script type="text/javascript">%s</script>'%ReadFile('paper.js')))
         display(HTML('<canvas id="canv%s" width=%spx height=%spx></canvas>'%(self._randHash, canvWidth, canvHeight)))

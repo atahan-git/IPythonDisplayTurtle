@@ -168,14 +168,14 @@ function Win (){
 	
 	var box = new Path.Rectangle({
 		point: [150	-10, 100-25-10],
-		size: [140, 35+10+10],
+		size: [135, 35+10+10],
 		fillColor: '#c6ffc4',
 		strokeColor: 'green'
 	});
 	
 	var text = new PointText({
 		point: [150, 100],
-		content: 'Your Won!',
+		content: 'You Won!',
 		fillColor: 'black',
 		fontFamily: 'Courier New',
 		fontWeight: 'bold',
