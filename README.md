@@ -35,5 +35,6 @@ t.turnright(360)
 t.display()
 ```
 
-.. image:: sample.png
+![Example Turtle](Example.png)
 
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/atahan-git/IPythonDisplayTurtle/master)
