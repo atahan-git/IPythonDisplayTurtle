@@ -1,5 +1,3 @@
-// Create a rectangle shaped path with its top left point at
-// {x: 75, y: 75} and a size of {width: 75, height: 75}
 
 var turtle = drawTurtle("#00A651","#FFF600");
 
@@ -66,23 +64,49 @@ function onFrame(event) {
 			// than 5, we define a new random point in the view to move the
 			// path to:
 			if (isArrived) {
-				movDestination = new Point(actionData[n][1], actionData[n][2]);
-				movVector = movDestination - turtle.position;
-				rotDestination = actionData[n][0];
-				
-				processActionData(n);
-				
 				n = n + 1;
 				if (n >= actionData.length){
 					isGoing = false;
 					return;
 				}
 				
+				movDestination = new Point(actionData[n][1], actionData[n][2]);
+				movVector = movDestination - turtle.position;
+				rotDestination = actionData[n][0];
+				
+				processActionData(n);
+				
+				// Death Check
+				if (typeof losePlaces !== 'undefined') {
+					for(var i = 0; i < losePlaces.length; i++){
+						var distance = (losePlaces[i] - turtle.position).length;
+						if(distance < 1){
+							console.log("snake Died!");
+							Die();
+							isGoing = false;
+						}
+					}
+				}
+				
+				// Win Check
+				if (typeof winPlace !== 'undefined') {
+					var distance = (winPlace - turtle.position).length;
+					if(distance < 1){
+						console.log("You won!");
+						Win();
+						isGoing = false;
+					}
+					
+				}
+				
+				console.log(actionData[n])
 				if(actionData[n-1][0] == actionData[n][0]){
 					movOrRotate = true;
 				}else{
 					movOrRotate = false;
 				}
+				
+				
 			}
 		}else{
 			var distance = (rotDestination - curRotation)
@@ -99,18 +123,17 @@ function onFrame(event) {
 			console.log("turtle rotating to: " + rotDestination.toString())
 			
 			if(isArrived){
+				n = n + 1;
+				if (n >= actionData.length){
+					isGoing = false;
+					return;
+				}
+				
 				movDestination = new Point(actionData[n][1], actionData[n][2]);
 				movVector = movDestination - turtle.position;
 				rotDestination = actionData[n][0];
 				
 				processActionData(n);
-				
-				n = n + 1;
-				
-				if (n >= actionData.length){
-					isGoing = false;
-					return;
-				}
 				
 				if(actionData[n-1][0] == actionData[n][0]){
 					movOrRotate = true;
@@ -120,6 +143,44 @@ function onFrame(event) {
 			}
 		}
 	}
+}
+
+function Die (){
+	
+	var box = new Path.Rectangle({
+		point: [100-10, 100-25-10],
+		size: [210, 35+10+10],
+		fillColor: '#ffc4c4',
+		strokeColor: 'red'
+	});
+	
+	var text = new PointText({
+		point: [100, 100],
+		content: 'Your snake died!',
+		fillColor: 'black',
+		fontFamily: 'Courier New',
+		fontWeight: 'bold',
+		fontSize: 25
+	});
+}
+
+function Win (){
+	
+	var box = new Path.Rectangle({
+		point: [150	-10, 100-25-10],
+		size: [140, 35+10+10],
+		fillColor: '#c6ffc4',
+		strokeColor: 'green'
+	});
+	
+	var text = new PointText({
+		point: [150, 100],
+		content: 'Your Won!',
+		fillColor: 'black',
+		fontFamily: 'Courier New',
+		fontWeight: 'bold',
+		fontSize: 25
+	});
 }
 
 function processActionData (n){

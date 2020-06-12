@@ -5,13 +5,13 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="IPythonDisplayTurtle", # Replace with your own username
-    version="0.0.7",
+    version="0.0.10",
     author="Atahan Ozturk",
     author_email="atahan012000@gmail.com",
     description="Turtles using IPython Display",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/pypa/sampleproject",
+    url="https://github.com/atahan-git/IPythonDisplayTurtle",
     packages=['IPythonDisplayTurtle'],
     package_data={'IPythonDisplayTurtle': ['jspart/*.js']},
     classifiers=[

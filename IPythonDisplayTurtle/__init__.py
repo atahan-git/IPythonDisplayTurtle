@@ -76,7 +76,7 @@ class Snake():
         newY = self._y - round(amount * math.cos(math.radians(self._rotation)), 1)
         self._moveTo(newX, newY)
     
-    def display(self):
+    def display(self, canvWidth = 400, canvHeight = 200, draw = True):
         # for some reason it is not doing the last 2 actions... sooooo
         self.goforward(1)
         self.turnright(1)
@@ -84,7 +84,7 @@ class Snake():
         self._randHash = "asForTurtle";
         ## Canvas creation
         display(HTML('<script type="text/javascript">%s</script>'%ReadFile('paper.js')))
-        display(HTML('<canvas id="canv%s" width=400px height=200px></canvas>'%self._randHash))
+        display(HTML('<canvas id="canv%s" width=%spx height=%spx></canvas>'%(self._randHash, canvWidth, canvHeight)))
         
         
         ## Data injection
@@ -98,5 +98,6 @@ class Snake():
         display(HTML('<script type="text/javascript">var actionData = %s;</script>'% (arrayString)))
         
         ## Drawing the turtle/executing on the injected data
-        display(HTML('<script type="text/paperscript" canvas="canv%s">%s</script>'% (self._randHash, ReadFile('AtahansTurtle.js'))))
+        if(draw):
+            display(HTML('<script type="text/paperscript" canvas="canv%s">%s</script>'% (self._randHash, ReadFile('AtahansTurtle.js'))))
   
