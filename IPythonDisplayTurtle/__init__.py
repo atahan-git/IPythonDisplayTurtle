@@ -71,15 +71,15 @@ class Snake():
     def turnLeft(self, amount):
         self._rotateTo(self._rotation - amount)
         
-    def goForward(self, amount):
+    def move(self, amount):
         newX = self._x + round(amount * math.sin(math.radians(self._rotation)), 1)
         newY = self._y - round(amount * math.cos(math.radians(self._rotation)), 1)
         self._moveTo(newX, newY)
     
     def display(self, canvWidth = 400, canvHeight = 200, draw = True):
         # for some reason it is not doing the last 2 actions... sooooo
-        self.goforward(1)
-        self.turnright(1)
+        self._moveTo(self._x+1, self._y)
+        self._rotateTo(self._rotation+1)
         # this is so that each turtle gets their own canvas
         self._randHash = random.getrandbits(128)
         #self._randHash = "asForTurtle";
