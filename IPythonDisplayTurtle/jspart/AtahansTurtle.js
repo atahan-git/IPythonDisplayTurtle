@@ -1,15 +1,22 @@
-
-var turtle = drawTurtle("#00A651","#FFF600");
-
 console.log(actionData)
 console.log(actionData.length);
-// The points data is injected by the python library
+// The action data is injected by the python library
 // it is an array with these elements:
 // [0-rotation:int, 1-positionX:int, 2-positionY:int
 //  3-speed:1-10, 4-rotspeed:1-10, 
 //  5-penDown:1/0, 6-penColor:string, 7-penWidth:int, 
-//  8-turtleMainColor:string, 9-turtleAccentColor:string, 10-backgroundColor:string, ]
-// total 11 items
+//  8-turtleMainColor:string, 9-turtleAccentColor:string, ]
+// total 10 items
+
+
+var winPlace = null;
+var wallPoints = [];
+var lavaPoints = [];
+
+var gridSize = 50;
+
+SetupLevel();
+var turtle = drawTurtle(actionData[0][8],actionData[0][9]);
 
 var movDestination = new Point(actionData[0][1], actionData[0][2]);
 var movVector = movDestination - turtle.position;
@@ -29,6 +36,7 @@ var n = 0;
 
 processActionData(0);
 SetAnimStates();
+
 function onFrame(event) {
 	if(event.count < 60){
 		return;
@@ -59,7 +67,20 @@ function onFrame(event) {
 			if(path != null){
 				path.lastSegment.point = turtle.position;
 			}
-
+			
+			// Wall crash check
+			if (typeof wallPoints != 'undefined') {
+				for(var i = 0; i < wallPoints.length; i++){
+					var distance = (wallPoints[i] - turtle.position).length;
+					// console.log(distance);
+					if(distance < gridSize/1.9){
+						console.log("snake hit a wall!");
+						HitAWall();
+						isGoing = false;
+					}
+				}
+			}
+				
 			// If the distance between the path and the destination is less
 			// than 5, we define a new random point in the view to move the
 			// path to:
@@ -77,10 +98,10 @@ function onFrame(event) {
 				processActionData(n);
 				
 				// Death Check
-				if (typeof losePlaces !== 'undefined') {
-					for(var i = 0; i < losePlaces.length; i++){
-						var distance = (losePlaces[i] - turtle.position).length;
-						if(distance < 1){
+				if (typeof lavaPoints != 'undefined') {
+					for(var i = 0; i < lavaPoints.length; i++){
+						var distance = (lavaPoints[i] - turtle.position).length;
+						if(distance < gridSize/2){
 							console.log("snake Died!");
 							Die();
 							isGoing = false;
@@ -111,7 +132,7 @@ function onFrame(event) {
 		}else{
 			var distance = (rotDestination - curRotation)
 			var isArrived = false;
-			if(distance>rotspeed){
+			if(Math.abs(distance)>rotspeed){
 				rotDelta = distance > 0 ? rotspeed : -rotspeed;
 				turtle.rotate(rotDelta);
 				curRotation += rotDelta;
@@ -142,6 +163,10 @@ function onFrame(event) {
 				}
 			}
 		}
+		
+		if(actionData[n-1][8] != actionData[n][8] || actionData[n-1][9] != actionData[n][9]){
+			SetSnakeColors(turtle, actionData[n][8], actionData[n][9])
+		}
 	}
 }
 
@@ -157,6 +182,25 @@ function Die (){
 	var text = new PointText({
 		point: [100, 100],
 		content: 'Your snake died!',
+		fillColor: 'black',
+		fontFamily: 'Courier New',
+		fontWeight: 'bold',
+		fontSize: 25
+	});
+}
+
+function HitAWall (){
+	
+	var box = new Path.Rectangle({
+		point: [100-10, 100-25-10],
+		size: [260, 35+10+10],
+		fillColor: '#ffeded',
+		strokeColor: 'red'
+	});
+	
+	var text = new PointText({
+		point: [100, 100],
+		content: 'Your snake hit a wall!',
 		fillColor: 'black',
 		fontFamily: 'Courier New',
 		fontWeight: 'bold',
@@ -266,6 +310,18 @@ function drawTurtle (mainColor, accentColor){
 	var turtle = new Group([tongue1, tongue2, tongue3, segment0, segment1, segment2, segment3, eye1, eyeSparkBig1, eyeSparkSmall1, eye2, eyeSparkBig2, eyeSparkSmall2, spot1, spot2, spot3, spot4])
 	turtle.scale(0.8);
 	return turtle;
+}
+
+function SetSnakeColors (myTurtle, mainColor, accentColor){
+	myTurtle.children[3].fillColor = mainColor
+	myTurtle.children[4].fillColor = mainColor
+	myTurtle.children[5].fillColor = mainColor
+	myTurtle.children[6].fillColor = mainColor
+	
+	myTurtle.children[13].fillColor = accentColor
+	myTurtle.children[14].fillColor = accentColor
+	myTurtle.children[15].fillColor = accentColor
+	myTurtle.children[16].fillColor = accentColor
 }
 
 function SetAnimStates (){
@@ -379,4 +435,202 @@ function AnimatePart (id, animState, animLength, anim){
 
 function lerp(a, b, t){
 	return new Point(a.x + (b.x - a.x) * t, a.y + (b.y - a.y) * t);
+}
+
+
+
+// Level Tools
+console.log(levelData)
+console.log(levelData.length);
+// The level data is injected by the python library
+// it is an array with these elements:
+// [0-gridData, 1-apple, 2-walls, 3-doorways 4-lava, 5-bridges, ]
+// Each of these are arrays themselves, with items:
+// [xPos, yPos, data]
+// Grid data holds: 0-canvWidth:int, 1-canvHeight:int, 2-gridSize:int, 3-backgroundColor:string, 4-drawGrid:0/1
+
+
+function SetupLevel (){
+	console.log("setting up the level")
+	gridData = levelData[0]
+	canvWidth = gridData[0]
+	canvHeight = gridData[1]
+	gridSize = gridData[2]
+	
+	winPlace = null;
+	wallPoints = [];
+	lavaPoints = [];
+	
+	if(levelData[0][4] == 1){
+		DrawGrid();
+	}
+	
+	if(levelData[1].length >0){
+		DrawAppleAt(levelData[1][0][0], levelData[1][0][1]);
+	}
+	
+	for(var i = 0; i < levelData[2].length; i++){
+		DrawWallAt(levelData[2][i][0], levelData[2][i][1], levelData[2][i][2])
+	}
+	
+	for(var i = 0; i < levelData[3].length; i++){
+		DrawDoorwayAt(levelData[3][i][0], levelData[3][i][1], levelData[3][i][2])
+	}
+	
+	for(var i = 0; i < levelData[4].length; i++){
+		DrawDeadlyCellAt(levelData[4][i][0], levelData[4][i][1])
+	}
+	
+	for(var i = 0; i < levelData[5].length; i++){
+		DrawBridgeAt(levelData[5][i][0], levelData[5][i][1], levelData[5][i][2])
+	}
+	
+	
+	console.log("level setup complete")
+}
+
+function DrawGrid (){
+	
+	for (var x = 5; x < canvWidth; x+=gridSize){
+		var gridX= new Path.Line(new Point(x,5), new Point(x,canvHeight-5))
+		gridX.strokeColor =  new Color(0.5,0.5,0.5,0.5);
+		gridX.strokeWidth = 1;
+	}
+
+	for (var y = 5; y < canvHeight; y+=gridSize){
+		var gridY= new Path.Line(new Point(5,y), new Point(canvWidth-5,y))
+		gridY.strokeColor =  new Color(0.5,0.5,0.5,0.5);
+		gridY.strokeWidth = 1;
+	}
+}
+
+
+function DrawAppleAt(x, y){
+	var apple = new Path.Circle({
+		center: [0,0],
+		radius: 10,
+		fillColor: "green",
+	});
+	
+	var stem = new Path({
+		segments: [[-4, -12], [0, -8], [5, -15]],
+		strokeColor: "#bd5800",
+		strokeWidth: 3,
+	});
+	
+	
+	apple.translate(x*gridSize + 5 + gridSize/2, y*gridSize +5 + gridSize/2);
+	stem.translate(x*gridSize + 5 + gridSize/2, y*gridSize +5 + gridSize/2);
+	
+	winPlace = new Point(x*gridSize + 5 + gridSize/2, y*gridSize +5 + gridSize/2);
+}
+
+function DrawWallAt(x, y, orientation){
+	// Walls can have 6 orientations: lines >> 0 = |; 1 = -; corners >> 2 = |_; 3 = |'; 4 = '|; 5 = _|;
+	var rotation = 0;
+	
+	var Wall = new Path({fillColor: "#cf9774", strokeColor:"black", strokeWidth:2});
+	Wall.closed = true;
+	
+	
+	if(orientation <= 1){
+		Wall.add(new Point(gridSize/2 - gridSize*0.1, 0), new Point(gridSize/2 + gridSize*0.1, 0))					//top
+		Wall.add(new Point(gridSize/2 + gridSize*0.1, gridSize),new Point(gridSize/2 - gridSize*0.1, gridSize))		//bottom
+		
+		if(orientation==1){
+			rotation = 90;
+		}
+		
+	}else{
+		Wall.add(new Point(gridSize/2 - gridSize*0.1, 0), new Point(gridSize/2 + gridSize*0.1, 0))					//top
+		Wall.add(new Point(gridSize/2 + gridSize*0.1, gridSize/2 - gridSize*0.1))									//elbow top
+		Wall.add(new Point(gridSize, gridSize/2 - gridSize*0.1), new Point(gridSize, gridSize/2 + gridSize*0.1))	//right
+		Wall.add(new Point(gridSize/2 - gridSize*0.1, gridSize/2 + gridSize*0.1))									//elbow bottom
+		
+		rotation = (orientation-2)*90;
+		
+	}
+	
+	Wall.rotate(rotation, new Point(gridSize/2, gridSize/2));
+	Wall.translate(x*gridSize + 5, y*gridSize +5);
+	
+	wallPoints.push(new Point(x*gridSize + 5 + gridSize/2, y*gridSize + 5 + gridSize/2));
+}
+
+function DrawDoorwayAt(x, y, orientation){
+	// Doorways can have 2 orientations: lines >> 0 = |; 1 = -;
+	var rotation = 0;
+	
+	var doorSize = gridSize/2
+	var doorMiddle = new Path.Rectangle({
+			point: [-((gridSize - doorSize)/2),-((gridSize - doorSize)/2)],
+			size: [gridSize - doorSize, gridSize - doorSize],
+			fillColor: '#d4c4b2'
+		});
+	
+	var door1 = new Path({fillColor: "#cf9774", strokeColor:"black", strokeWidth:2});
+	door1.closed = true;
+	var door2 = new Path({fillColor: "#cf9774", strokeColor:"black", strokeWidth:2});
+	door2.closed = true;
+	
+	door1.add(new Point(gridSize/2 - gridSize*0.1, 0), new Point(gridSize/2 + gridSize*0.1, 0))					//top
+	door1.add(new Point(gridSize/2 + gridSize*0.1, gridSize/2 - doorSize/2),new Point(gridSize/2 - gridSize*0.1, gridSize/2 - doorSize/2))//bottom
+	
+	door2.add(new Point(gridSize/2 - gridSize*0.1, gridSize/2 + doorSize/2), new Point(gridSize/2 + gridSize*0.1, gridSize/2 + doorSize/2))//top
+	door2.add(new Point(gridSize/2 + gridSize*0.1, gridSize),new Point(gridSize/2 - gridSize*0.1, gridSize))	//bottom
+		
+	if(orientation==1){
+		rotation = 90;
+	}
+	
+	door1.rotate(rotation, new Point(gridSize/2, gridSize/2));
+	door2.rotate(rotation, new Point(gridSize/2, gridSize/2));
+	door1.translate(x*gridSize + 5, y*gridSize +5);
+	door2.translate(x*gridSize + 5, y*gridSize +5);
+	doorMiddle.translate(x*gridSize + 5 + gridSize/2, y*gridSize +5 + gridSize/2);
+}
+
+function DrawDeadlyCellAt (x,y){
+	var give = gridSize/10;
+	var deadlyCell = new Path.Rectangle({
+		point: [-((gridSize - give)/2),-((gridSize - give)/2)],
+		size: [gridSize - give, gridSize - give],
+		fillColor: 'red'
+	});
+	
+	deadlyCell.translate(x*gridSize + 5 + gridSize/2, y*gridSize +5 + gridSize/2);
+	
+	lavaPoints.push(new Point(x*gridSize + 5 + gridSize/2, y*gridSize + 5 + gridSize/2));
+}
+
+// use orientation=0 for bridge going from left-right and 1 for top-bottom
+function DrawBridgeAt (x, y, orientation){
+	var give = gridSize/10;
+	var deadlyCell = new Path.Rectangle({
+		point: [-((gridSize-give)/2),-((gridSize-give)/2)],
+		size: [gridSize-give, gridSize-give],
+		fillColor: 'red'
+	});
+	
+	deadlyCell.translate(x*gridSize + 5 + gridSize/2, y*gridSize +5 + gridSize/2);
+	
+	var xsize = gridSize + gridSize*0.4;
+	var ysize = gridSize + gridSize*0.4;
+	
+	if(orientation == 0){
+		ysize = gridSize*0.4;
+	}else{
+		xsize = gridSize*0.4;
+	}
+	
+	var xoffset = -(xsize/2);
+	var yoffset = -(ysize/2);
+	
+	var bridge = new Path.Rectangle({
+		point: [xoffset, yoffset],
+		size: [xsize, ysize],
+		fillColor: '#ab5f37'
+	});
+	
+	bridge.translate(x*gridSize + 5 + gridSize/2, y*gridSize +5 + gridSize/2);
 }
