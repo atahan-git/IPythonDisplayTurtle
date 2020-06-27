@@ -308,7 +308,10 @@ function drawTurtle (mainColor, accentColor){
 	eyeSparkSmall2.fillColor = 'white'
 	
 	var turtle = new Group([tongue1, tongue2, tongue3, segment0, segment1, segment2, segment3, eye1, eyeSparkBig1, eyeSparkSmall1, eye2, eyeSparkBig2, eyeSparkSmall2, spot1, spot2, spot3, spot4])
-	turtle.scale(0.8);
+	var turtleScale = 0.8;
+	turtleScale = turtleScale * (gridSize/50); //if the grid is smaller than 'default' make the snake smaller as well!
+	
+	turtle.scale(turtleScale);
 	return turtle;
 }
 
@@ -451,6 +454,10 @@ console.log(levelData.length);
 
 
 function SetupLevel (){
+	if(levelData.length <= 0){
+		console.log("No Level data detected")
+		return;
+	}
 	console.log("setting up the level")
 	gridData = levelData[0]
 	canvWidth = gridData[0]
