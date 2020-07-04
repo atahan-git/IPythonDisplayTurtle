@@ -7,9 +7,11 @@ Can be used with Jupyter Notebooks, and in places where ipywidgets are not suppo
 Also has level drawing capabilities. You can check the source code yourself for more info!
 
 How to install from a terminal/command prompt:
+
 	pip install IPythonDisplayTurtle
 	
 To install from a jupyter notebook cell:
+
 	!pip install IPythonDisplayTurtle
 
 How to use:

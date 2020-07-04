@@ -44,6 +44,8 @@ function onFrame(event) {
 	
 	wiggleTurtle(event.count, isGoing);
 	
+	var speedMult = event.delta*60.0 * 2;
+	
 	if(isGoing){
 		if(movOrRotate){
 			// Each frame, move the path 1/30th of the difference in position
@@ -57,8 +59,8 @@ function onFrame(event) {
 			// destination point:
 			var distance = (movDestination - turtle.position).length;
 			var isArrived = false;
-			if(distance>speed){
-				turtle.position += movVector.normalize(speed);
+			if(distance>speed*speedMult){
+				turtle.position += movVector.normalize(speed*speedMult);
 			}else{
 				turtle.position = movDestination
 				isArrived = true;
@@ -86,16 +88,6 @@ function onFrame(event) {
 			// path to:
 			if (isArrived) {
 				n = n + 1;
-				if (n >= actionData.length){
-					isGoing = false;
-					return;
-				}
-				
-				movDestination = new Point(actionData[n][1], actionData[n][2]);
-				movVector = movDestination - turtle.position;
-				rotDestination = actionData[n][0];
-				
-				processActionData(n);
 				
 				// Death Check
 				if (typeof lavaPoints != 'undefined') {
@@ -112,13 +104,28 @@ function onFrame(event) {
 				// Win Check
 				if (typeof winPlace !== 'undefined') {
 					var distance = (winPlace - turtle.position).length;
-					if(distance < 1){
+					console.log(distance)
+					if(distance < gridSize/2){
 						console.log("You won!");
 						Win();
 						isGoing = false;
 					}
 					
 				}
+				
+				
+				if (n >= actionData.length){
+					isGoing = false;
+					return;
+				}
+				
+				movDestination = new Point(actionData[n][1], actionData[n][2]);
+				movVector = movDestination - turtle.position;
+				rotDestination = actionData[n][0];
+				
+				processActionData(n);
+				
+				
 				
 				console.log(actionData[n])
 				if(actionData[n-1][0] == actionData[n][0]){
@@ -132,8 +139,8 @@ function onFrame(event) {
 		}else{
 			var distance = (rotDestination - curRotation)
 			var isArrived = false;
-			if(Math.abs(distance)>rotspeed){
-				rotDelta = distance > 0 ? rotspeed : -rotspeed;
+			if(Math.abs(distance)>rotspeed*speedMult){
+				rotDelta = distance > 0 ? rotspeed*speedMult : -rotspeed*speedMult;
 				turtle.rotate(rotDelta);
 				curRotation += rotDelta;
 			}else{
