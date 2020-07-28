@@ -233,7 +233,7 @@ class Snake():
             x-=1
         return self.islocationclear(x,y)
     
-    def ifleftclear(self):
+    def isleftclear(self):
         x = self._x
         y = self._y
         rot = round((self._rotation%360)/90)
