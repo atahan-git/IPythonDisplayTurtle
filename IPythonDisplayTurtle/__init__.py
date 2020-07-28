@@ -119,6 +119,16 @@ class Snake():
                            ])
         self._curActionCount += 1
         if(self._curActionCount > self.MAXACTIONCOUNT):
+            repCount = 0
+            for i in range(self.MAXACTIONCOUNT):
+                if(self._actions[i] == self._actions[i]):
+                    repCount += 1
+                else:
+                    repCount = 0
+                if(repCount >= 10):
+                    self._actions = self._actions[:i]
+                    break;
+            self.display()
             raise Exception("Your snake tried to do too many things! Do you have a while loop that never ends?")
         
         
