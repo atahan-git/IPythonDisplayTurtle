@@ -28,6 +28,7 @@ def _xydatobjectarraytostring(arr):
 
 class Snake():
 
+    MAXACTIONCOUNT = 100000
 
     # If you  are using gridmode=True, the movement will be based on the grid not units (ie forward(1) >>> forward(1*gridSize)) and rotation will rounded to 90 degrees
     def __init__(self, _pendown=1, gridmode=False, gridsize=50, homeX = 50 + 25 + 5, homeY = 50 + 25 + 5, canvWidth = 400, canvHeight = 200, \
@@ -95,9 +96,13 @@ class Snake():
         
         self._levelDataString += "]"
         
+        self._actions = []
+        self._appendCurrentState();
+        
         if(debug):
             print(self._levelDataString)
         
+    _curActionCount = 0
     def _appendCurrentState (self):
         """An Internal helper method for 'saving' the current state of the snake"""
         x = self._x
@@ -112,6 +117,10 @@ class Snake():
                             self._pendown, self._pencolor, self._penwidth,
                             self._turtleMainColor, self._turtleAccentColor
                            ])
+        self._curActionCount += 1
+        if(self._curActionCount > self.MAXACTIONCOUNT):
+            raise Exception("Your snake tried to do too many things! Do you have a while loop that never ends?")
+        
         
     def goto(self, x, y):
         """An Internal helper method for setting the snake's position."""

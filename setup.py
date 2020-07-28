@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="IPythonDisplayTurtle", # Replace with your own username
-    version="0.0.25",
+    version="0.0.26",
     author="Atahan Ozturk",
     author_email="atahan012000@gmail.com",
     description="Turtles using IPython Display",
