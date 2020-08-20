@@ -28,7 +28,7 @@ def _xydatobjectarraytostring(arr):
 
 class Snake():
 
-    MAXACTIONCOUNT = 100000
+    MAXACTIONCOUNT = 10000
 
     # If you  are using gridmode=True, the movement will be based on the grid not units (ie forward(1) >>> forward(1*gridSize)) and rotation will rounded to 90 degrees
     def __init__(self, _pendown=1, gridmode=False, gridsize=50, homeX = 50 + 25 + 5, homeY = 50 + 25 + 5, canvWidth = 400, canvHeight = 200, \
