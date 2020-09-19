@@ -1,4 +1,4 @@
-console.log(actionData)
+console.log(actionData);
 console.log(actionData.length);
 // The action data is injected by the python library
 // it is an array with these elements:
@@ -62,10 +62,10 @@ function onFrame(event) {
 			if(distance>speed*speedMult){
 				turtle.position += movVector.normalize(speed*speedMult);
 			}else{
-				turtle.position = movDestination
+				turtle.position = movDestination;
 				isArrived = true;
 			}
-			console.log("turtle moving to: " + movDestination.toString())
+			console.log("turtle moving to: " + movDestination.toString());
 			if(path != null){
 				path.lastSegment.point = turtle.position;
 			}
@@ -104,7 +104,7 @@ function onFrame(event) {
 				// Win Check
 				if (typeof winPlace !== 'undefined') {
 					var distance = (winPlace - turtle.position).length;
-					console.log(distance)
+					console.log(distance);
 					if(distance < gridSize/2){
 						console.log("You won!");
 						Win();
@@ -127,7 +127,7 @@ function onFrame(event) {
 				
 				
 				
-				console.log(actionData[n])
+				console.log(actionData[n]);
 				if(actionData[n-1][0] == actionData[n][0]){
 					movOrRotate = true;
 				}else{
@@ -137,7 +137,7 @@ function onFrame(event) {
 				
 			}
 		}else{
-			var distance = (rotDestination - curRotation)
+			var distance = (rotDestination - curRotation);
 			var isArrived = false;
 			if(Math.abs(distance)>rotspeed*speedMult){
 				rotDelta = distance > 0 ? rotspeed*speedMult : -rotspeed*speedMult;
@@ -148,7 +148,7 @@ function onFrame(event) {
 				curRotation += distance;
 				isArrived = true;
 			}
-			console.log("turtle rotating to: " + rotDestination.toString())
+			console.log("turtle rotating to: " + rotDestination.toString());
 			
 			if(isArrived){
 				n = n + 1;
@@ -172,7 +172,7 @@ function onFrame(event) {
 		}
 		
 		if(actionData[n-1][8] != actionData[n][8] || actionData[n-1][9] != actionData[n][9]){
-			SetSnakeColors(turtle, actionData[n][8], actionData[n][9])
+			SetSnakeColors(turtle, actionData[n][8], actionData[n][9]);
 		}
 	}
 }
@@ -253,9 +253,9 @@ function setPenInfo (n){
 			strokeWidth: actionData[n][7],
 			strokeCap: 'round'
 		});
-		path.add(turtle.position, turtle.position)
+		path.add(turtle.position, turtle.position);
 	}else{
-		path = null
+		path = null;
 	}
 }
 
@@ -301,20 +301,20 @@ function drawTurtle (mainColor, accentColor){
 	spot4.add(new Point(-18.1, 2.2));
 	
 	var eye1 = new Path.Circle({center: [22.5, -5.9], radius: 3});
-	eye1.fillColor = 'black'
+	eye1.fillColor = 'black';
 	var eyeSparkBig1 = new Path.Circle({center: [23.3, -7.2], radius: 1});
-	eyeSparkBig1.fillColor = 'white'
+	eyeSparkBig1.fillColor = 'white';
 	var eyeSparkSmall1 = new Path.Circle({center: [20.9, -5.9], radius: 0.6});
-	eyeSparkSmall1.fillColor = 'white'
+	eyeSparkSmall1.fillColor = 'white';
 	
 	var eye2 = new Path.Circle({center: [22.5, 2.9], radius: 3});
-	eye2.fillColor = 'black'
+	eye2.fillColor = 'black';
 	var eyeSparkBig2 = new Path.Circle({center: [23.3, 1.6], radius: 1});
-	eyeSparkBig2.fillColor = 'white'
+	eyeSparkBig2.fillColor = 'white';
 	var eyeSparkSmall2 = new Path.Circle({center: [20.9, 2.9], radius: 0.6});
-	eyeSparkSmall2.fillColor = 'white'
+	eyeSparkSmall2.fillColor = 'white';
 	
-	var turtle = new Group([tongue1, tongue2, tongue3, segment0, segment1, segment2, segment3, eye1, eyeSparkBig1, eyeSparkSmall1, eye2, eyeSparkBig2, eyeSparkSmall2, spot1, spot2, spot3, spot4])
+	var turtle = new Group([tongue1, tongue2, tongue3, segment0, segment1, segment2, segment3, eye1, eyeSparkBig1, eyeSparkSmall1, eye2, eyeSparkBig2, eyeSparkSmall2, spot1, spot2, spot3, spot4]);
 	var turtleScale = 0.8;
 	turtleScale = turtleScale * (gridSize/50); //if the grid is smaller than 'default' make the snake smaller as well!
 	
@@ -323,15 +323,15 @@ function drawTurtle (mainColor, accentColor){
 }
 
 function SetSnakeColors (myTurtle, mainColor, accentColor){
-	myTurtle.children[3].fillColor = mainColor
-	myTurtle.children[4].fillColor = mainColor
-	myTurtle.children[5].fillColor = mainColor
-	myTurtle.children[6].fillColor = mainColor
+	myTurtle.children[3].fillColor = mainColor;
+	myTurtle.children[4].fillColor = mainColor;
+	myTurtle.children[5].fillColor = mainColor;
+	myTurtle.children[6].fillColor = mainColor;
 	
-	myTurtle.children[13].fillColor = accentColor
-	myTurtle.children[14].fillColor = accentColor
-	myTurtle.children[15].fillColor = accentColor
-	myTurtle.children[16].fillColor = accentColor
+	myTurtle.children[13].fillColor = accentColor;
+	myTurtle.children[14].fillColor = accentColor;
+	myTurtle.children[15].fillColor = accentColor;
+	myTurtle.children[16].fillColor = accentColor;
 }
 
 function SetAnimStates (){
@@ -431,13 +431,13 @@ function AnimatePart (id, animState, animLength, anim){
 		var vector = -anim;
 		vector /= (animLength/2);
 		vector.angle += (curRotation-defRotation);
-		turtle.children[id].translate(vector)
+		turtle.children[id].translate(vector);
 		//turtle.children[id].position = lerp(anim[0], anim[1], animState/(animLength/2));
 	}else{
 		var vector = anim;
 		vector /= (animLength/2);
 		vector.angle += (curRotation-defRotation);
-		turtle.children[id].translate(vector)
+		turtle.children[id].translate(vector);
 		//turtle.children[id].position = lerp(anim[0], anim[1], (animLength-animState)/(animLength/2));
 	}
 }
@@ -450,7 +450,7 @@ function lerp(a, b, t){
 
 
 // Level Tools
-console.log(levelData)
+console.log(levelData);
 console.log(levelData.length);
 // The level data is injected by the python library
 // it is an array with these elements:
@@ -462,14 +462,14 @@ console.log(levelData.length);
 
 function SetupLevel (){
 	if(levelData.length <= 0){
-		console.log("No Level data detected")
+		console.log("No Level data detected");
 		return;
 	}
-	console.log("setting up the level")
-	gridData = levelData[0]
-	canvWidth = gridData[0]
-	canvHeight = gridData[1]
-	gridSize = gridData[2]
+	console.log("setting up the level");
+	gridData = levelData[0];
+	canvWidth = gridData[0];
+	canvHeight = gridData[1];
+	gridSize = gridData[2];
 	
 	winPlace = null;
 	wallPoints = [];
@@ -484,35 +484,35 @@ function SetupLevel (){
 	}
 	
 	for(var i = 0; i < levelData[2].length; i++){
-		DrawWallAt(levelData[2][i][0], levelData[2][i][1], levelData[2][i][2])
+		DrawWallAt(levelData[2][i][0], levelData[2][i][1], levelData[2][i][2]);
 	}
 	
 	for(var i = 0; i < levelData[3].length; i++){
-		DrawDoorwayAt(levelData[3][i][0], levelData[3][i][1], levelData[3][i][2])
+		DrawDoorwayAt(levelData[3][i][0], levelData[3][i][1], levelData[3][i][2]);
 	}
 	
 	for(var i = 0; i < levelData[4].length; i++){
-		DrawDeadlyCellAt(levelData[4][i][0], levelData[4][i][1])
+		DrawDeadlyCellAt(levelData[4][i][0], levelData[4][i][1]);
 	}
 	
 	for(var i = 0; i < levelData[5].length; i++){
-		DrawBridgeAt(levelData[5][i][0], levelData[5][i][1], levelData[5][i][2])
+		DrawBridgeAt(levelData[5][i][0], levelData[5][i][1], levelData[5][i][2]);
 	}
 	
 	
-	console.log("level setup complete")
+	console.log("level setup complete");
 }
 
 function DrawGrid (){
 	
 	for (var x = 5; x < canvWidth; x+=gridSize){
-		var gridX= new Path.Line(new Point(x,5), new Point(x,canvHeight-5))
+		var gridX= new Path.Line(new Point(x,5), new Point(x,canvHeight-5));
 		gridX.strokeColor =  new Color(0.5,0.5,0.5,0.5);
 		gridX.strokeWidth = 1;
 	}
 
 	for (var y = 5; y < canvHeight; y+=gridSize){
-		var gridY= new Path.Line(new Point(5,y), new Point(canvWidth-5,y))
+		var gridY= new Path.Line(new Point(5,y), new Point(canvWidth-5,y));
 		gridY.strokeColor =  new Color(0.5,0.5,0.5,0.5);
 		gridY.strokeWidth = 1;
 	}
@@ -548,18 +548,18 @@ function DrawWallAt(x, y, orientation){
 	
 	
 	if(orientation <= 1){
-		Wall.add(new Point(gridSize/2 - gridSize*0.1, 0), new Point(gridSize/2 + gridSize*0.1, 0))					//top
-		Wall.add(new Point(gridSize/2 + gridSize*0.1, gridSize),new Point(gridSize/2 - gridSize*0.1, gridSize))		//bottom
+		Wall.add(new Point(gridSize/2 - gridSize*0.1, 0), new Point(gridSize/2 + gridSize*0.1, 0));					//top
+		Wall.add(new Point(gridSize/2 + gridSize*0.1, gridSize),new Point(gridSize/2 - gridSize*0.1, gridSize));	//bottom
 		
 		if(orientation==1){
 			rotation = 90;
 		}
 		
 	}else{
-		Wall.add(new Point(gridSize/2 - gridSize*0.1, 0), new Point(gridSize/2 + gridSize*0.1, 0))					//top
-		Wall.add(new Point(gridSize/2 + gridSize*0.1, gridSize/2 - gridSize*0.1))									//elbow top
-		Wall.add(new Point(gridSize, gridSize/2 - gridSize*0.1), new Point(gridSize, gridSize/2 + gridSize*0.1))	//right
-		Wall.add(new Point(gridSize/2 - gridSize*0.1, gridSize/2 + gridSize*0.1))									//elbow bottom
+		Wall.add(new Point(gridSize/2 - gridSize*0.1, 0), new Point(gridSize/2 + gridSize*0.1, 0));					//top
+		Wall.add(new Point(gridSize/2 + gridSize*0.1, gridSize/2 - gridSize*0.1));									//elbow top
+		Wall.add(new Point(gridSize, gridSize/2 - gridSize*0.1), new Point(gridSize, gridSize/2 + gridSize*0.1));	//right
+		Wall.add(new Point(gridSize/2 - gridSize*0.1, gridSize/2 + gridSize*0.1));									//elbow bottom
 		
 		rotation = (orientation-2)*90;
 		
@@ -575,7 +575,7 @@ function DrawDoorwayAt(x, y, orientation){
 	// Doorways can have 2 orientations: lines >> 0 = |; 1 = -;
 	var rotation = 0;
 	
-	var doorSize = gridSize/2
+	var doorSize = gridSize/2;
 	var doorMiddle = new Path.Rectangle({
 			point: [-((gridSize - doorSize)/2),-((gridSize - doorSize)/2)],
 			size: [gridSize - doorSize, gridSize - doorSize],
@@ -587,11 +587,11 @@ function DrawDoorwayAt(x, y, orientation){
 	var door2 = new Path({fillColor: "#cf9774", strokeColor:"black", strokeWidth:2});
 	door2.closed = true;
 	
-	door1.add(new Point(gridSize/2 - gridSize*0.1, 0), new Point(gridSize/2 + gridSize*0.1, 0))					//top
-	door1.add(new Point(gridSize/2 + gridSize*0.1, gridSize/2 - doorSize/2),new Point(gridSize/2 - gridSize*0.1, gridSize/2 - doorSize/2))//bottom
+	door1.add(new Point(gridSize/2 - gridSize*0.1, 0), new Point(gridSize/2 + gridSize*0.1, 0));					//top
+	door1.add(new Point(gridSize/2 + gridSize*0.1, gridSize/2 - doorSize/2),new Point(gridSize/2 - gridSize*0.1, gridSize/2 - doorSize/2));//bottom
 	
-	door2.add(new Point(gridSize/2 - gridSize*0.1, gridSize/2 + doorSize/2), new Point(gridSize/2 + gridSize*0.1, gridSize/2 + doorSize/2))//top
-	door2.add(new Point(gridSize/2 + gridSize*0.1, gridSize),new Point(gridSize/2 - gridSize*0.1, gridSize))	//bottom
+	door2.add(new Point(gridSize/2 - gridSize*0.1, gridSize/2 + doorSize/2), new Point(gridSize/2 + gridSize*0.1, gridSize/2 + doorSize/2));//top
+	door2.add(new Point(gridSize/2 + gridSize*0.1, gridSize),new Point(gridSize/2 - gridSize*0.1, gridSize));	//bottom
 		
 	if(orientation==1){
 		rotation = 90;

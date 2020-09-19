@@ -78,6 +78,7 @@ class Snake():
         '''
         self._walls = walls
         self._lava = lava
+        self._apple = apple
                         
         self._levelDataString = "["
         
@@ -117,16 +118,19 @@ class Snake():
                             self._pendown, self._pencolor, self._penwidth,
                             self._turtleMainColor, self._turtleAccentColor
                            ])
+                           
         self._curActionCount += 1
         if(self._curActionCount > self.MAXACTIONCOUNT):
+            # If the loop is something that keeps repeating the last action, 
+            # then cut the _actions so that the final display is less laggy
             repCount = 0
             for i in range(self.MAXACTIONCOUNT):
                 if(self._actions[i] == self._actions[i]):
                     repCount += 1
                 else:
                     repCount = 0
-                if(repCount >= 10):
-                    self._actions = self._actions[:i]
+                if(repCount >= 10): #if the last 10 actions are the same
+                    self._actions = self._actions[:i] # cut everything after that
                     break;
             self.display()
             raise Exception("Your snake tried to do too many things! Do you have a while loop that never ends?")
@@ -227,6 +231,12 @@ class Snake():
                 
         return True
                 
+    def islocationapple(self,x,y):
+        for apple in self._apple:
+            if(apple[0] == x and apple[1] == y):
+                return True
+             
+        return False
         
     
     def isfrontclear(self):
@@ -290,14 +300,15 @@ class Snake():
             self._arrayString += '[%s, %s, %s, %s, %s, %s, "%s", %s, "%s", "%s"], ' \
             % (act[0], act[1], act[2], act[3], act[4], act[5], act[6], act[7], act[8], act[9])
         self._arrayString += "]"
-        #print(arrayString)
         
         # inject data
-        htmlString += ('<script type="text/javascript">var actionData = %s; var levelData = %s</script>'% (self._arrayString, self._levelDataString)) + "\n"
+        htmlString += ('<script type="text/javascript">var actionData = %s; var levelData = %s;</script>'% (self._arrayString, self._levelDataString)) + "\n"
+        #print(self._levelDataString)
         
         ## Drawing the turtle
         htmlString += ('<script type="text/paperscript" canvas="canv%s">%s</script>'% (self._randHash, ReadFile('AtahansTurtle.js')))
         htmlString = htmlString.replace("actionData", "actionData" + str(self._randHash));
         htmlString = htmlString.replace("levelData", "levelData" + str(self._randHash));
+        #print(htmlString);
         display(HTML(htmlString))
   
