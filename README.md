@@ -2,7 +2,7 @@
 Please note that this is still being actively developed, hence may not work properly for you!
 
 # IPythonDisplayTurtle
-An implementation of the classic turtle module mainly made using IPython.display, IPython.HTML, and paperscript. 
+An implementation of the classic turtle module mainly created using IPython.display, IPython.HTML, and paperscript. 
 Can be used with Jupyter Notebooks, and in places where ipywidgets are not supported. Only requires one way communication to work, so great for remote server cases.
 Also has level drawing capabilities. You can check the source code yourself for more info!
 
