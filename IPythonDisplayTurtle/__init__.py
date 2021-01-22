@@ -214,7 +214,7 @@ class Snake():
         self.goto(newX, newY)
     
     def home(self):
-        self.goto(self._homeX, self.homeY)
+        self.goto(self._homeX, self._homeY)
         self.setheading(0)
         
     def pos(self):
