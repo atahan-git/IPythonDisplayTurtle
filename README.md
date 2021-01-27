@@ -29,11 +29,11 @@ for i in range(divisions):
         t.pencolor(colours[int(i/2)%len(colours)])
     else:
         t.penup()
-    t.goforward(300/divisions)
-    t.turnright(angle)
+    t.forward(300/divisions)
+    t.right(angle)
 t.penup()
-t.goforward(120)
-t.turnright(360)
+t.forward(120)
+t.right(360)
 
 t.display()
 ```
