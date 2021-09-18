@@ -1,6 +1,8 @@
 # WIP
 Please note that this is still being actively developed, hence may not work properly for you!
 
+Also see: https://github.com/atahan-git/SSSsnake
+
 # IPythonDisplayTurtle
 An implementation of the classic turtle module mainly created using IPython.display, IPython.HTML, and paperscript. 
 Can be used with Jupyter Notebooks, and in places where ipywidgets are not supported. Only requires one way communication to work, so great for remote server cases.
